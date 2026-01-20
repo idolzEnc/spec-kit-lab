@@ -75,9 +75,35 @@ Define the guiding principles for your frontend:
 
 ---
 
-## Step 3: Create Feature Specifications
+## Step 3: Implement Features Using Spec Kit Workflow
 
-### 3.1 Authentication UI Specification
+For each feature, follow the complete Spec Kit workflow:
+
+1. **Specify** → Create the feature specification
+2. **Plan** → Generate implementation plan
+3. **Tasks** → Break down into actionable tasks
+4. **Implement** → Execute the implementation
+
+> **⚠️ Important:** Complete the full workflow for each feature before moving to the next one.
+
+---
+
+### 📋 Recommended Implementation Order
+
+| Order | Feature                 | Reason                          |
+| ----- | ----------------------- | ------------------------------- |
+| 1     | Authentication UI       | Required for all other features |
+| 2     | Adventure Dashboard     | Core navigation                 |
+| 3     | Character Management UI | Depends on adventures           |
+| 4     | Game Interface          | Main gameplay                   |
+| 5     | Inventory UI            | Enhances gameplay               |
+| 6     | Quest Log               | Complete experience             |
+
+---
+
+### Feature 1: Authentication UI
+
+#### Step 3.1.1 - Specify
 
 ```
 /speckit.specify Build an authentication interface with:
@@ -90,7 +116,51 @@ Define the guiding principles for your frontend:
 - Loading states during API calls
 ```
 
-### 3.2 Adventure Dashboard Specification
+#### Step 3.1.2 - Plan
+
+**For React:**
+
+```
+/speckit.plan Use React 18 with TypeScript. Use Vite for build tooling. Use React Router for navigation. Use TanStack Query (React Query) for API state management. Use Tailwind CSS for styling. Use Zustand for global state (auth tokens). Store API URL in environment variables.
+```
+
+**For Vue:**
+
+```
+/speckit.plan Use Vue 3 with TypeScript and Composition API. Use Vite for build tooling. Use Vue Router for navigation. Use Pinia for state management. Use Tailwind CSS for styling. Store API URL in environment variables.
+```
+
+**For Vanilla JavaScript:**
+
+```
+/speckit.plan Use vanilla HTML, CSS, and JavaScript. Use Vite for build tooling. Use native fetch API for HTTP requests. Use CSS custom properties for theming. Create modular JavaScript with ES modules. Store API URL in environment variables.
+```
+
+#### Step 3.1.3 - Tasks
+
+```
+/speckit.tasks
+```
+
+#### Step 3.1.4 - Implement
+
+```
+/speckit.implement
+```
+
+#### ✅ Checkpoint: Verify Authentication UI
+
+- [ ] Login form displays and validates input
+- [ ] Registration form creates new user
+- [ ] Token is stored securely after login
+- [ ] Protected routes redirect to login
+- [ ] Logout clears session
+
+---
+
+### Feature 2: Adventure Dashboard
+
+#### Step 3.2.1 - Specify
 
 ```
 /speckit.specify Build an adventure dashboard where users can:
@@ -102,7 +172,36 @@ Define the guiding principles for your frontend:
 - Show loading skeleton while fetching data
 ```
 
-### 3.3 Character Management UI Specification
+#### Step 3.2.2 - Plan
+
+```
+/speckit.plan Continue with the existing tech stack. Create dashboard components with adventure list. Implement CRUD operations through API hooks/composables. Add confirmation modal for delete. Create loading skeletons.
+```
+
+#### Step 3.2.3 - Tasks
+
+```
+/speckit.tasks
+```
+
+#### Step 3.2.4 - Implement
+
+```
+/speckit.implement
+```
+
+#### ✅ Checkpoint: Verify Adventure Dashboard
+
+- [ ] Adventures list loads from API
+- [ ] Can create new adventure
+- [ ] Can select adventure to play
+- [ ] Delete shows confirmation
+
+---
+
+### Feature 3: Character Management UI
+
+#### Step 3.3.1 - Specify
 
 ```
 /speckit.specify Build a character management interface:
@@ -115,7 +214,36 @@ Define the guiding principles for your frontend:
 - Character selection for adventures
 ```
 
-### 3.4 Game Interface Specification
+#### Step 3.3.2 - Plan
+
+```
+/speckit.plan Continue with the existing tech stack. Create character form with attribute inputs. Implement modifier calculation display. Add dice roll integration for stat generation. Create character sheet component.
+```
+
+#### Step 3.3.3 - Tasks
+
+```
+/speckit.tasks
+```
+
+#### Step 3.3.4 - Implement
+
+```
+/speckit.implement
+```
+
+#### ✅ Checkpoint: Verify Character Management
+
+- [ ] Character creation form works
+- [ ] Attributes can be allocated
+- [ ] Modifiers display correctly
+- [ ] Character sheet shows all stats
+
+---
+
+### Feature 4: Game Interface
+
+#### Step 3.4.1 - Specify
 
 ```
 /speckit.specify Build the main text adventure game interface:
@@ -128,7 +256,36 @@ Define the guiding principles for your frontend:
 - Dice roll results display with animation
 ```
 
-### 3.5 Inventory UI Specification
+#### Step 3.4.2 - Plan
+
+```
+/speckit.plan Continue with the existing tech stack. Create game screen with narrative display. Implement command input with history. Add character status sidebar. Create combat UI with turn indicator. Add dice roll animation component.
+```
+
+#### Step 3.4.3 - Tasks
+
+```
+/speckit.tasks
+```
+
+#### Step 3.4.4 - Implement
+
+```
+/speckit.implement
+```
+
+#### ✅ Checkpoint: Verify Game Interface
+
+- [ ] Narrative text displays and scrolls
+- [ ] Commands can be entered
+- [ ] Character status shows correctly
+- [ ] Combat mode works
+
+---
+
+### Feature 5: Inventory UI
+
+#### Step 3.5.1 - Specify
 
 ```
 /speckit.specify Build an inventory management interface:
@@ -141,7 +298,36 @@ Define the guiding principles for your frontend:
 - Sort and filter options
 ```
 
-### 3.6 Quest Log Specification
+#### Step 3.5.2 - Plan
+
+```
+/speckit.plan Continue with the existing tech stack. Create inventory grid component. Implement item detail modal/tooltip. Add equipment slot visualization. Create equip/unequip functionality.
+```
+
+#### Step 3.5.3 - Tasks
+
+```
+/speckit.tasks
+```
+
+#### Step 3.5.4 - Implement
+
+```
+/speckit.implement
+```
+
+#### ✅ Checkpoint: Verify Inventory UI
+
+- [ ] Items display in grid/list
+- [ ] Item details show on interaction
+- [ ] Equip/unequip works
+- [ ] Stacks show quantities
+
+---
+
+### Feature 6: Quest Log
+
+#### Step 3.6.1 - Specify
 
 ```
 /speckit.specify Build a quest tracking interface:
@@ -153,80 +339,34 @@ Define the guiding principles for your frontend:
 - Filter by quest status (active, completed, failed)
 ```
 
----
-
-## Step 4: Create Implementation Plan
-
-Generate the technical implementation plan:
-
-### For React:
+#### Step 3.6.2 - Plan
 
 ```
-/speckit.plan Use React 18 with TypeScript. Use Vite for build tooling. Use React Router for navigation. Use TanStack Query (React Query) for API state management. Use Tailwind CSS for styling. Use Zustand for global state (auth tokens). Create reusable components in src/components. Use custom hooks for API calls. Store API URL in environment variables.
+/speckit.plan Continue with the existing tech stack. Create quest list component with filters. Implement quest detail view. Add progress indicators. Create completed quests section.
 ```
 
-### For Vue:
-
-```
-/speckit.plan Use Vue 3 with TypeScript and Composition API. Use Vite for build tooling. Use Vue Router for navigation. Use Pinia for state management. Use Tailwind CSS for styling. Create reusable components in src/components. Use composables for API interactions. Store API URL in environment variables.
-```
-
-### For Vanilla JavaScript:
-
-```
-/speckit.plan Use vanilla HTML, CSS, and JavaScript. Use Vite for build tooling and hot reload. Use native fetch API for HTTP requests. Use CSS custom properties for theming. Create modular JavaScript with ES modules. Use Web Components for reusable UI elements. Store API URL in environment variables. Focus on progressive enhancement.
-```
-
----
-
-## Step 5: Analyze Consistency
-
-Validate your plan against the specifications:
-
-```
-/speckit.analyze
-```
-
-Review any issues and refine your plan if needed.
-
----
-
-## Step 6: Generate Task Breakdown
-
-Create actionable tasks:
+#### Step 3.6.3 - Tasks
 
 ```
 /speckit.tasks
 ```
 
-Review the generated `tasks.md` to understand:
-
-- Implementation phases
-- Component dependencies
-- Testing requirements
-
----
-
-## Step 7: Execute Implementation
-
-Build the frontend:
+#### Step 3.6.4 - Implement
 
 ```
 /speckit.implement
 ```
 
-The AI will implement:
+#### ✅ Checkpoint: Verify Quest Log
 
-1. Project setup and configuration
-2. Authentication flow
-3. API integration layer
-4. UI components
-5. Page routing and navigation
-6. State management
+- [ ] Quest list displays
+- [ ] Quest details show objectives
+- [ ] Progress indicators work
+- [ ] Filters function correctly
 
 ---
 
-## Step 8: Connect to Your API
+## Step 4: Connect to Your API
 
 ### Configure API Endpoint
 
@@ -247,7 +387,7 @@ npm run dev
 # Navigate to http://localhost:5173
 ```
 
-### Verify API Integration
+### Verify Full Integration
 
 1. Register a new account
 2. Log in with credentials
@@ -257,7 +397,7 @@ npm run dev
 
 ---
 
-## Step 9: Security Checklist
+## Step 5: Security Checklist
 
 Ensure your frontend implements:
 

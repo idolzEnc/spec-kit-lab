@@ -113,21 +113,122 @@ Define the guiding principles for your infrastructure:
 
 ---
 
-## Step 4: Create Infrastructure Specifications
+## Step 4: Implement Infrastructure Using Spec Kit Workflow
 
-### 4.1 Core Infrastructure Specification
+For each infrastructure component, follow the complete Spec Kit workflow:
+
+1. **Specify** → Create the infrastructure specification
+2. **Plan** → Generate implementation plan
+3. **Tasks** → Break down into actionable tasks
+4. **Implement** → Execute the implementation
+
+> **⚠️ Important:** Complete the full workflow for each module before moving to the next one. This ensures proper dependency management.
+
+---
+
+### 📋 Recommended Implementation Order
+
+| Order | Module                  | Reason                            |
+| ----- | ----------------------- | --------------------------------- |
+| 1     | Core Infrastructure     | Foundation for all resources      |
+| 2     | Security Infrastructure | Key Vault needed by other modules |
+| 3     | Backend Infrastructure  | API deployment                    |
+| 4     | Frontend Infrastructure | Static web app                    |
+| 5     | CI/CD Infrastructure    | Automation (Optional)             |
+
+---
+
+### Module 1: Core Infrastructure
+
+#### Step 4.1.1 - Specify
 
 ```
 /speckit.specify Create core Azure infrastructure with:
 - Resource Group for all adventure game resources
 - Virtual Network with subnets for app tier and database tier
 - Network Security Groups with appropriate rules
-- Azure Key Vault for secrets management
 - Storage Account for Terraform state (if not exists)
 - Tags for environment, project name, and cost center
 ```
 
-### 4.2 Backend Infrastructure Specification
+#### Step 4.1.2 - Plan
+
+```
+/speckit.plan Use Terraform 1.5+ with Azure provider. Create a networking module with VNet, subnets, and NSGs. Use variable files for dev and prod environments. Store state in Azure Storage with state locking. Follow Terraform best practices for naming.
+```
+
+#### Step 4.1.3 - Tasks
+
+```
+/speckit.tasks
+```
+
+#### Step 4.1.4 - Implement
+
+```
+/speckit.implement
+```
+
+#### ✅ Checkpoint: Verify Core Infrastructure
+
+```bash
+cd terraform/environments/dev
+terraform init
+terraform plan
+terraform apply
+
+# Verify resources
+az resource list --resource-group adventure-game-dev-rg --output table
+```
+
+---
+
+### Module 2: Security Infrastructure
+
+#### Step 4.2.1 - Specify
+
+```
+/speckit.specify Create security infrastructure:
+- Azure Key Vault with access policies
+- Managed Identities for services
+- Private endpoints for database (optional)
+- Diagnostic settings for audit logging
+- Azure Defender recommendations compliance
+```
+
+#### Step 4.2.2 - Plan
+
+```
+/speckit.plan Continue with the existing Terraform setup. Create a key-vault module. Implement access policies using managed identities. Add diagnostic settings for logging. Use data sources to reference the networking module outputs.
+```
+
+#### Step 4.2.3 - Tasks
+
+```
+/speckit.tasks
+```
+
+#### Step 4.2.4 - Implement
+
+```
+/speckit.implement
+```
+
+#### ✅ Checkpoint: Verify Security Infrastructure
+
+```bash
+terraform plan
+terraform apply
+
+# Verify Key Vault
+az keyvault show --name adventure-kv-dev --resource-group adventure-game-dev-rg
+```
+
+---
+
+### Module 3: Backend Infrastructure
+
+#### Step 4.3.1 - Specify
 
 ```
 /speckit.specify Create infrastructure for the REST API backend:
@@ -140,7 +241,42 @@ Define the guiding principles for your infrastructure:
 - Custom domain and SSL certificate (optional)
 ```
 
-### 4.3 Frontend Infrastructure Specification
+#### Step 4.3.2 - Plan
+
+```
+/speckit.plan Continue with the existing Terraform setup. Create app-service and database modules. Configure App Service with managed identity. Store connection string in Key Vault. Add Application Insights for monitoring. Use references to networking and key-vault modules.
+```
+
+#### Step 4.3.3 - Tasks
+
+```
+/speckit.tasks
+```
+
+#### Step 4.3.4 - Implement
+
+```
+/speckit.implement
+```
+
+#### ✅ Checkpoint: Verify Backend Infrastructure
+
+```bash
+terraform plan
+terraform apply
+
+# Verify App Service
+az webapp show --name adventure-api-dev --resource-group adventure-game-dev-rg --query state
+
+# Verify Database
+az postgres flexible-server show --name adventure-db-dev --resource-group adventure-game-dev-rg
+```
+
+---
+
+### Module 4: Frontend Infrastructure
+
+#### Step 4.4.1 - Specify
 
 ```
 /speckit.specify Create infrastructure for the frontend application:
@@ -151,19 +287,39 @@ Define the guiding principles for your infrastructure:
 - Staging environment for preview deployments
 ```
 
-### 4.4 Security Infrastructure Specification
+#### Step 4.4.2 - Plan
 
 ```
-/speckit.specify Create security infrastructure:
-- Azure Key Vault with access policies
-- Managed Identities for services
-- Private endpoints for database (optional)
-- Azure Front Door or Application Gateway (optional)
-- Diagnostic settings for audit logging
-- Azure Defender recommendations compliance
+/speckit.plan Continue with the existing Terraform setup. Create static-web-app module. Configure environment variables to point to the App Service URL. Set up staging environment. Use outputs from the backend module for API URL.
 ```
 
-### 4.5 CI/CD Infrastructure Specification (Optional)
+#### Step 4.4.3 - Tasks
+
+```
+/speckit.tasks
+```
+
+#### Step 4.4.4 - Implement
+
+```
+/speckit.implement
+```
+
+#### ✅ Checkpoint: Verify Frontend Infrastructure
+
+```bash
+terraform plan
+terraform apply
+
+# Get Static Web App URL
+terraform output static_web_app_url
+```
+
+---
+
+### Module 5: CI/CD Infrastructure (Optional)
+
+#### Step 4.5.1 - Specify
 
 ```
 /speckit.specify Create CI/CD infrastructure:
@@ -173,63 +329,39 @@ Define the guiding principles for your infrastructure:
 - GitHub Actions secrets configuration guide
 ```
 
----
-
-## Step 5: Create Implementation Plan
-
-Generate the technical implementation plan:
+#### Step 4.5.2 - Plan
 
 ```
-/speckit.plan Use Terraform 1.5+ with Azure provider. Create modules for: networking, app-service, database, key-vault, static-web-app. Use variable files for dev and prod environments. Store state in Azure Storage with state locking. Use data sources to reference existing resources. Follow Terraform best practices for naming and structure.
+/speckit.plan Continue with the existing Terraform setup. Create Service Principal with Contributor role scoped to resource group. Document required GitHub secrets. Generate deployment token for Static Web App.
 ```
 
----
-
-## Step 6: Analyze Infrastructure Plan
-
-Validate your infrastructure design:
-
-```
-/speckit.analyze
-```
-
-Check for:
-
-- Security gaps
-- Missing dependencies
-- Cost optimization opportunities
-
----
-
-## Step 7: Generate Task Breakdown
-
-Create actionable infrastructure tasks:
+#### Step 4.5.3 - Tasks
 
 ```
 /speckit.tasks
 ```
 
----
-
-## Step 8: Execute Implementation
-
-Build the Terraform configuration:
+#### Step 4.5.4 - Implement
 
 ```
 /speckit.implement
 ```
 
-The AI will create:
+#### ✅ Checkpoint: Verify CI/CD Infrastructure
 
-1. Module structure
-2. Variable definitions
-3. Resource configurations
-4. Output definitions
-5. Environment-specific configurations
+```bash
+terraform plan
+terraform apply
+
+# Verify Service Principal
+az ad sp list --display-name adventure-game-github-sp --output table
+```
 
 ---
 
-## Step 9: Deploy Infrastructure
+## Step 5: Deploy Complete Infrastructure
+
+After implementing all modules, deploy the complete infrastructure:
 
 ### Initialize Terraform
 
@@ -267,7 +399,7 @@ terraform output
 
 ---
 
-## Step 10: Verify Deployment
+## Step 6: Verify Deployment
 
 ### Check Azure Resources
 

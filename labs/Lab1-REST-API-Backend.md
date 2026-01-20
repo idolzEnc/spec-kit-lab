@@ -98,26 +98,91 @@ Define the guiding principles for your API:
 
 ---
 
-## Step 4: Create Feature Specifications
+## Step 4: Implement Features Using Spec Kit Workflow
 
-### 4.1 Adventure System Specification
+For each feature, follow the complete Spec Kit workflow:
+
+1. **Specify** → Create the feature specification
+2. **Plan** → Generate implementation plan
+3. **Tasks** → Break down into actionable tasks
+4. **Implement** → Execute the implementation
+
+> **⚠️ Important:** Complete the full workflow for each feature before moving to the next one. This ensures each feature is fully implemented and tested before building dependent features.
+
+---
+
+### 📋 Recommended Implementation Order
+
+| Order | Feature              | Reason                          |
+| ----- | -------------------- | ------------------------------- |
+| 1     | Authentication       | Required for all other features |
+| 2     | Dice System          | Foundation for combat mechanics |
+| 3     | Adventure System     | Core game structure             |
+| 4     | Character Management | Depends on adventures           |
+| 5     | Inventory System     | Depends on characters           |
+| 6     | Combat System        | Depends on dice, characters     |
+| 7     | Quest System         | Depends on all previous         |
+
+---
+
+### Feature 1: Authentication System
+
+#### Step 4.1.1 - Specify
 
 ```
-/speckit.specify Build an adventure initialization system where users can start a new text adventure. Each adventure has a unique ID, creation timestamp, current scene, and game state. Users should be able to create, retrieve, update, and delete adventures. Include JWT authentication for all operations.
+/speckit.specify Build a security system with:
+- JWT token-based authentication
+- User registration and login endpoints
+- Token refresh mechanism
+- Role-based permissions (player, game master, admin)
+- Rate limiting for API protection
 ```
 
-### 4.2 Character Management Specification
+#### Step 4.1.2 - Plan
+
+**For TypeScript:**
 
 ```
-/speckit.specify Build a character management system with the following:
-- Create, edit, retrieve characters
-- Attributes: STR (Strength), DEX (Dexterity), INT (Intelligence), CON (Constitution), CHA (Charisma)
-- Each attribute has a base value (3-18) and calculated modifier ((value - 10) / 2)
-- Character snapshots and versioning for game saves
-- Character belongs to an adventure
+/speckit.plan Use TypeScript with Express.js framework. Use Prisma ORM with PostgreSQL database. Use Jest for unit testing. Implement JWT authentication with jsonwebtoken library. Structure code with controllers, services, and repositories pattern.
 ```
 
-### 4.3 Dice System Specification
+**For C#:**
+
+```
+/speckit.plan Use C# with ASP.NET Core 8 Web API. Use Entity Framework Core with PostgreSQL database. Use xUnit for unit testing. Implement JWT authentication with Microsoft.AspNetCore.Authentication.JwtBearer. Follow Clean Architecture pattern.
+```
+
+#### Step 4.1.3 - Tasks
+
+```
+/speckit.tasks
+```
+
+#### Step 4.1.4 - Implement
+
+```
+/speckit.implement
+```
+
+#### ✅ Checkpoint: Verify Authentication
+
+```bash
+# Test registration
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"username": "adventurer", "password": "quest123"}'
+
+# Test login
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "adventurer", "password": "quest123"}'
+```
+
+---
+
+### Feature 2: Dice System
+
+#### Step 4.2.1 - Specify
 
 ```
 /speckit.specify Build a dice rolling engine that supports:
@@ -128,7 +193,173 @@ Define the guiding principles for your API:
 - Cryptographically secure random number generation
 ```
 
-### 4.4 Combat System Specification
+#### Step 4.2.2 - Plan
+
+```
+/speckit.plan Continue with the existing tech stack. Create a DiceService with parser and roller. Implement regex-based expression parsing. Use crypto library for secure random. Create comprehensive unit tests for all dice expressions.
+```
+
+#### Step 4.2.3 - Tasks
+
+```
+/speckit.tasks
+```
+
+#### Step 4.2.4 - Implement
+
+```
+/speckit.implement
+```
+
+#### ✅ Checkpoint: Verify Dice System
+
+```bash
+# Test dice roll (requires auth token)
+curl -X POST http://localhost:3000/api/dice/roll \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your-token>" \
+  -d '{"expression": "2d6+3"}'
+```
+
+---
+
+### Feature 3: Adventure System
+
+#### Step 4.3.1 - Specify
+
+```
+/speckit.specify Build an adventure initialization system where users can start a new text adventure. Each adventure has a unique ID, creation timestamp, current scene, and game state. Users should be able to create, retrieve, update, and delete adventures. Include JWT authentication for all operations.
+```
+
+#### Step 4.3.2 - Plan
+
+```
+/speckit.plan Continue with the existing tech stack. Create Adventure entity with relationships. Implement CRUD operations with proper authorization. Add scene management and game state persistence. Generate OpenAPI documentation for all endpoints.
+```
+
+#### Step 4.3.3 - Tasks
+
+```
+/speckit.tasks
+```
+
+#### Step 4.3.4 - Implement
+
+```
+/speckit.implement
+```
+
+#### ✅ Checkpoint: Verify Adventure System
+
+```bash
+# Create adventure
+curl -X POST http://localhost:3000/api/adventures \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your-token>" \
+  -d '{"name": "The Dark Cave"}'
+
+# List adventures
+curl -X GET http://localhost:3000/api/adventures \
+  -H "Authorization: Bearer <your-token>"
+```
+
+---
+
+### Feature 4: Character Management
+
+#### Step 4.4.1 - Specify
+
+```
+/speckit.specify Build a character management system with the following:
+- Create, edit, retrieve characters
+- Attributes: STR (Strength), DEX (Dexterity), INT (Intelligence), CON (Constitution), CHA (Charisma)
+- Each attribute has a base value (3-18) and calculated modifier ((value - 10) / 2)
+- Character snapshots and versioning for game saves
+- Character belongs to an adventure
+```
+
+#### Step 4.4.2 - Plan
+
+```
+/speckit.plan Continue with the existing tech stack. Create Character entity linked to Adventure. Implement attribute system with automatic modifier calculation. Add snapshot/versioning system for character history. Create unit tests for modifier calculations.
+```
+
+#### Step 4.4.3 - Tasks
+
+```
+/speckit.tasks
+```
+
+#### Step 4.4.4 - Implement
+
+```
+/speckit.implement
+```
+
+#### ✅ Checkpoint: Verify Character System
+
+```bash
+# Create character
+curl -X POST http://localhost:3000/api/adventures/{adventureId}/characters \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your-token>" \
+  -d '{"name": "Aldric", "str": 16, "dex": 14, "int": 10, "con": 15, "cha": 12}'
+```
+
+---
+
+### Feature 5: Inventory System
+
+#### Step 4.5.1 - Specify
+
+```
+/speckit.specify Build an inventory management system:
+- Items can be stackable (potions, arrows) or unique (weapons, armor)
+- Items can be equipped or stored
+- Equipment slots: head, chest, hands, legs, feet, main hand, off hand
+- Loot tables for random item generation
+- Item effects and modifiers
+```
+
+#### Step 4.5.2 - Plan
+
+```
+/speckit.plan Continue with the existing tech stack. Create Item and Inventory entities. Implement equipment slot system. Create loot table with weighted random selection using dice system. Add item effect modifiers to character stats.
+```
+
+#### Step 4.5.3 - Tasks
+
+```
+/speckit.tasks
+```
+
+#### Step 4.5.4 - Implement
+
+```
+/speckit.implement
+```
+
+#### ✅ Checkpoint: Verify Inventory System
+
+```bash
+# Add item to inventory
+curl -X POST http://localhost:3000/api/characters/{characterId}/inventory \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your-token>" \
+  -d '{"itemId": "sword-01", "quantity": 1}'
+
+# Equip item
+curl -X POST http://localhost:3000/api/characters/{characterId}/equip \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your-token>" \
+  -d '{"itemId": "sword-01", "slot": "main_hand"}'
+```
+
+---
+
+### Feature 6: Combat System
+
+#### Step 4.6.1 - Specify
 
 ```
 /speckit.specify Build a turn-based combat system with:
@@ -140,18 +371,45 @@ Define the guiding principles for your API:
 - Damage calculation with weapon dice
 ```
 
-### 4.5 Inventory System Specification
+#### Step 4.6.2 - Plan
 
 ```
-/speckit.specify Build an inventory management system:
-- Items can be stackable (potions, arrows) or unique (weapons, armor)
-- Items can be equipped or stored
-- Equipment slots: head, chest, hands, legs, feet, main hand, off hand
-- Loot tables for random item generation
-- Item effects and modifiers
+/speckit.plan Continue with the existing tech stack. Create NPC/Enemy entities with AI state machine. Implement initiative system using dice service. Create combat resolver with attack rolls and damage calculation. Add unit tests for combat scenarios.
 ```
 
-### 4.6 Quest System Specification
+#### Step 4.6.3 - Tasks
+
+```
+/speckit.tasks
+```
+
+#### Step 4.6.4 - Implement
+
+```
+/speckit.implement
+```
+
+#### ✅ Checkpoint: Verify Combat System
+
+```bash
+# Start combat
+curl -X POST http://localhost:3000/api/adventures/{adventureId}/combat/start \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your-token>" \
+  -d '{"enemies": ["goblin-01", "goblin-02"]}'
+
+# Execute turn
+curl -X POST http://localhost:3000/api/adventures/{adventureId}/combat/turn \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your-token>" \
+  -d '{"action": "attack", "targetId": "goblin-01"}'
+```
+
+---
+
+### Feature 7: Quest System
+
+#### Step 4.7.1 - Specify
 
 ```
 /speckit.specify Build a multi-stage quest system:
@@ -163,101 +421,53 @@ Define the guiding principles for your API:
 - Quest dependencies (prerequisite quests)
 ```
 
-### 4.7 Authentication Specification
+#### Step 4.7.2 - Plan
 
 ```
-/speckit.specify Build a security system with:
-- JWT token-based authentication
-- User registration and login endpoints
-- Token refresh mechanism
-- Role-based permissions (player, game master, admin)
-- Rate limiting for API protection
+/speckit.plan Continue with the existing tech stack. Create Quest and QuestStage entities. Implement progress tracking system. Add condition evaluation for success/failure. Integrate with inventory for rewards. Create quest dependency graph.
 ```
 
----
-
-## Step 5: Clarify Requirements (Optional)
-
-If your specifications have `[NEEDS CLARIFICATION]` markers:
-
-```
-/speckit.clarify
-```
-
-Answer any questions the AI asks to refine the specifications.
-
----
-
-## Step 6: Create Implementation Plan
-
-Generate the technical implementation plan:
-
-### For TypeScript:
-
-```
-/speckit.plan Use TypeScript with Express.js framework. Use Prisma ORM with PostgreSQL database. Generate OpenAPI 3.0.1 specification using tsoa for automatic documentation. Use Jest for unit testing. Implement JWT authentication with jsonwebtoken library. Structure code with controllers, services, and repositories pattern.
-```
-
-### For C#:
-
-```
-/speckit.plan Use C# with ASP.NET Core 8 Web API. Use Entity Framework Core with PostgreSQL database. Generate OpenAPI 3.0.1 specification using Swashbuckle/Swagger. Use xUnit for unit testing. Implement JWT authentication with Microsoft.AspNetCore.Authentication.JwtBearer. Follow Clean Architecture pattern with controllers, services, and repositories.
-```
-
----
-
-## Step 7: Analyze Consistency
-
-Validate your plan against the specifications:
-
-```
-/speckit.analyze
-```
-
-This checks for:
-
-- Missing requirements
-- Inconsistencies between spec and plan
-- Potential architectural issues
-
----
-
-## Step 8: Generate Task Breakdown
-
-Create actionable tasks from the plan:
+#### Step 4.7.3 - Tasks
 
 ```
 /speckit.tasks
 ```
 
-This generates a `tasks.md` file with:
-
-- Phased implementation tasks
-- Dependencies between tasks
-- Parallel execution opportunities
-- Test requirements for each task
-
----
-
-## Step 9: Execute Implementation
-
-Build the feature according to the plan:
+#### Step 4.7.4 - Implement
 
 ```
 /speckit.implement
 ```
 
-The AI will:
+#### ✅ Checkpoint: Verify Quest System
 
-1. Process tasks in dependency order
-2. Follow TDD (write tests first)
-3. Create the API endpoints
-4. Generate OpenAPI documentation
-5. Implement all required functionality
+```bash
+# Get available quests
+curl -X GET http://localhost:3000/api/adventures/{adventureId}/quests \
+  -H "Authorization: Bearer <your-token>"
+
+# Accept quest
+curl -X POST http://localhost:3000/api/adventures/{adventureId}/quests/{questId}/accept \
+  -H "Authorization: Bearer <your-token>"
+```
 
 ---
 
-## Step 10: Verify Your Implementation
+## Step 5: Generate OpenAPI Documentation
+
+After all features are implemented, ensure your OpenAPI specification is complete:
+
+```bash
+# For TypeScript with tsoa
+npm run swagger
+
+# For C# - Swagger is auto-generated at runtime
+# Access at: http://localhost:5000/swagger
+```
+
+---
+
+## Step 6: Verify Your Implementation
 
 ### Run Tests
 
