@@ -1,0 +1,186 @@
+openapi: 3.0.1
+info:
+  title: Dice Rolling API
+  version: 1.0.0
+  description: REST API for evaluating dice expressions.
+servers:
+  - url: https://api.example.com
+paths:
+  /rolls:
+    post:
+      summary: Evaluate a dice expression
+      operationId: createRoll
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RollRequest"
+            examples:
+              basic:
+                value:
+                  expression: "2d6+1d4+3"
+                  mode: "normal"
+      responses:
+        "200":
+          description: Roll result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RollResponse"
+              examples:
+                normal:
+                  value:
+                    expression: "2d6+1d4+3"
+                    mode: "normal"
+                    rollSets:
+                      - total: 12
+                        terms:
+                          - term: "2d6"
+                            rolls: [3, 5]
+                            termTotal: 8
+                          - term: "1d4"
+                            rolls: [1]
+                            termTotal: 1
+                          - term: "3"
+                            rolls: []
+                            termTotal: 3
+                    selectedIndex: 0
+                    total: 12
+                advantage:
+                  value:
+                    expression: "1d20+5"
+                    mode: "advantage"
+                    rollSets:
+                      - total: 18
+                        terms:
+                          - term: "1d20"
+                            rolls: [13]
+                            termTotal: 13
+                          - term: "5"
+                            rolls: []
+                            termTotal: 5
+                      - total: 22
+                        terms:
+                          - term: "1d20"
+                            rolls: [17]
+                            termTotal: 17
+                          - term: "5"
+                            rolls: []
+                            termTotal: 5
+                    selectedIndex: 1
+                    total: 22
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              examples:
+                invalidExpression:
+                  value:
+                    errorCode: "INVALID_EXPRESSION"
+                    message: "Invalid dice expression"
+                    details:
+                      field: "expression"
+                      reason: "Syntax does not match NdM format"
+        "429":
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    RollRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - expression
+      properties:
+        expression:
+          type: string
+          description: Dice expression to evaluate.
+          example: "2d6+1d4+3"
+        mode:
+          type: string
+          description: Roll mode for advantage/disadvantage.
+          enum: [normal, advantage, disadvantage]
+          default: normal
+    RollResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - expression
+        - mode
+        - rollSets
+        - selectedIndex
+        - total
+      properties:
+        expression:
+          type: string
+        mode:
+          type: string
+          enum: [normal, advantage, disadvantage]
+        rollSets:
+          type: array
+          minItems: 1
+          maxItems: 2
+          items:
+            $ref: "#/components/schemas/RollSet"
+        selectedIndex:
+          type: integer
+          minimum: 0
+          maximum: 1
+        total:
+          type: integer
+    RollSet:
+      type: object
+      additionalProperties: false
+      required:
+        - total
+        - terms
+      properties:
+        total:
+          type: integer
+        terms:
+          type: array
+          items:
+            $ref: "#/components/schemas/RollTerm"
+    RollTerm:
+      type: object
+      additionalProperties: false
+      required:
+        - term
+        - rolls
+        - termTotal
+      properties:
+        term:
+          type: string
+          description: Original term string.
+        rolls:
+          type: array
+          items:
+            type: integer
+        termTotal:
+          type: integer
+    ErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - errorCode
+        - message
+      properties:
+        errorCode:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
